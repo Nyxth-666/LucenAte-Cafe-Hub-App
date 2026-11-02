@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme {
+  --color-lucena-primary: #D1B59D;
+  --color-lucena-primary-dark: #A88B72;
+
+  --color-background: #FAF8F5;
+  --color-surface: #FFFFFF;
+
+  --color-text-dark: #3B3028;
+  --color-text-secondary: #75685E;
+
+  --color-accent: #7A5C45;
+
+  --color-success: #6F8F72;
+  --color-warning: #C49A5A;
+  --color-error: #B65F5F;
+
+  --color-border: #E5DDD5;
+}
