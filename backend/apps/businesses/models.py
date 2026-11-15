@@ -26,10 +26,6 @@ class Business(models.Model):
         REJECTED = "REJECTED", "Rejected"
         SUSPENDED = "SUSPENDED", "Suspended"
 
-    class BusinessHours(models.Model):
-        opening = models.IntegerField()
-        closing = models.IntegerField()
-
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,

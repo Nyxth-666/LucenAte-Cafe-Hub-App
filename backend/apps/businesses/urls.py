@@ -1,5 +1,10 @@
 from django.urls import path
+from .views import BusinessDocumentUploadView
 
 urlpatterns = [
-    # Authentication endpoints will go here
+    path(
+        "<int:business_id>/documents/upload/",
+        BusinessDocumentUploadView.as_view(),
+        name="business-document-upload",
+    ),
 ]

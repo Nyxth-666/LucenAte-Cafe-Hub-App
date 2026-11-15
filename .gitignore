@@ -19,6 +19,7 @@ env/
 # Django
 staticfiles/
 media/
+business_documents/
 *.pot
 
 # Node
