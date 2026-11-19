@@ -5,6 +5,8 @@ from .models import (
     BusinessOperatingHours,
     BusinessDocument,
 )
+from apps.locations.serializers import BusinessLocationSerializer
+
 
 class BusinessOperatingHoursSerializer(serializers.ModelSerializer):
 
@@ -34,6 +36,7 @@ class BusinessOperatingHoursSerializer(serializers.ModelSerializer):
                 )
 
         return attrs
+
 
 class BusinessSerializer(serializers.ModelSerializer):
 
@@ -80,9 +83,7 @@ class BusinessSerializer(serializers.ModelSerializer):
         return value
 
     def create(self, validated_data):
-        operating_hours_data = validated_data.pop(
-            "operating_hours", []
-        )
+        operating_hours_data = validated_data.pop("operating_hours", [])
 
         features_data = validated_data.pop("features", [])
 
@@ -98,6 +99,7 @@ class BusinessSerializer(serializers.ModelSerializer):
 
         return business
 
+
 class BusinessDocumentSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -111,3 +113,147 @@ class BusinessDocumentSerializer(serializers.ModelSerializer):
             "id",
             "uploaded_at",
         ]
+
+
+class BusinessDocumentReviewSerializer(serializers.ModelSerializer):
+    filename = serializers.SerializerMethodField()
+
+    class Meta:
+        model = BusinessDocument
+        fields = [
+            "id",
+            "filename",
+            "uploaded_at",
+        ]
+
+    def get_filename(self, obj):
+        return obj.document.name.split("/")[-1]
+
+
+class BusinessReviewSerializer(serializers.ModelSerializer):
+    owner_name = serializers.SerializerMethodField()
+    owner_email = serializers.EmailField(
+        source="owner.email",
+        read_only=True,
+    )
+
+    features = serializers.StringRelatedField(many=True)
+
+    locations = BusinessLocationSerializer(many=True, read_only=True)
+
+    operating_hours = BusinessOperatingHoursSerializer(
+        many=True,
+        read_only=True,
+    )
+
+    documents = BusinessDocumentReviewSerializer(
+        many=True,
+        read_only=True,
+    )
+
+    class Meta:
+        model = Business
+        fields = [
+            "id",
+            "name",
+            "business_type",
+            "price_range",
+            "phone_number",
+            "email",
+            "description",
+            "status",
+            "owner_name",
+            "owner_email",
+            "features",
+            "locations",
+            "operating_hours",
+            "documents",
+            "created_at",
+        ]
+
+    def get_owner_name(self, obj):
+        return obj.owner.get_full_name() or obj.owner.username
+
+
+class BusinessOwnerReviewSerializer(serializers.Serializer):
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    email = serializers.EmailField()
+
+
+class BusinessLocationReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        from apps.locations.models import BusinessLocation
+
+        model = BusinessLocation
+        fields = [
+            "id",
+            "street_address",
+            "barangay",
+            "city",
+            "province",
+            "latitude",
+            "longitude",
+        ]
+
+
+class BusinessDocumentReviewSerializer(serializers.ModelSerializer):
+    document_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = BusinessDocument
+        fields = [
+            "id",
+            "document_name",
+            "uploaded_at",
+        ]
+
+    def get_document_name(self, obj):
+        return obj.document.name.split("/")[-1]
+
+
+class BusinessApplicationReviewSerializer(serializers.ModelSerializer):
+    owner = BusinessOwnerReviewSerializer(read_only=True)
+    locations = BusinessLocationReviewSerializer(many=True, read_only=True)
+    operating_hours = BusinessOperatingHoursSerializer(
+        many=True,
+        read_only=True,
+    )
+    documents = BusinessDocumentReviewSerializer(
+        many=True,
+        read_only=True,
+    )
+
+    class Meta:
+        model = Business
+        fields = [
+            "id",
+            "owner",
+            "name",
+            "business_type",
+            "price_range",
+            "phone_number",
+            "email",
+            "description",
+            "features",
+            "locations",
+            "operating_hours",
+            "documents",
+            "status",
+            "created_at",
+            "updated_at",
+        ]
+        read_only_fields = fields
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        data["owner"] = {
+            "first_name": instance.owner.first_name,
+            "last_name": instance.owner.last_name,
+            "email": instance.owner.email,
+        }
+
+        data["features"] = list(instance.features.values_list("name", flat=True))
+
+        return data
