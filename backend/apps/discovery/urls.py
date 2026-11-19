@@ -1,5 +1,16 @@
 from django.urls import path
 
+from .views import BusinessDiscoveryView, BusinessDetailView
+
 urlpatterns = [
-    # Authentication endpoints will go here
+    path(
+        "businesses/",
+        BusinessDiscoveryView.as_view(),
+        name="business-discovery",
+    ),
+    path(
+        "businesses/<int:pk>/",
+        BusinessDetailView.as_view(),
+        name="business-detail",
+    ),
 ]
