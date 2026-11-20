@@ -28,4 +28,9 @@ urlpatterns = [
         "api/reviews/",
         include("apps.reviews.urls")
     ),
+
+    path(
+        "api/menus/",
+        include("apps.menus.urls")
+    ),
 ]
