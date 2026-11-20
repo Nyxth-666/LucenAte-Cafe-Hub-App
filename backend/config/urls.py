@@ -13,4 +13,19 @@ urlpatterns = [
         "api/businesses/",
         include("apps.businesses.urls"),
     ),
+
+    path(
+        "api/discovery/",
+        include("apps.discovery.urls")
+    ),
+
+    path(
+        "api/favorites/",
+        include("apps.favorites.urls")
+    ),
+
+    path(
+        "api/reviews/",
+        include("apps.reviews.urls")
+    ),
 ]
