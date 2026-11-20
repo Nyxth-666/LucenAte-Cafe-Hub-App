@@ -1,5 +1,9 @@
 from django.urls import path
-from . views import BusinessOwnerRegistrationView
+
+from .views import (
+    UserRegistrationView,
+    BusinessOwnerRegistrationView,
+)
 
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -7,6 +11,11 @@ from rest_framework_simplejwt.views import (
 )
 
 urlpatterns = [
+    path(
+        "register/",
+        UserRegistrationView.as_view(),
+        name="user-register",
+    ),
     path(
         "register/business-owner/",
         BusinessOwnerRegistrationView.as_view(),
