@@ -1,12 +1,13 @@
-function App() {
+import { Navigate, Route, Routes } from "react-router-dom";
+import HomePage from "./pages/HomePage";
 
+function App() {
   return (
-    <div className="bg-background text-text-dark">
-      <h1 className="text-lucena-primary-dark">
-        Discover Lucena.
-      </h1>
-    </div>
-  )
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
 }
 
-export default App
+export default App;
