@@ -1,8 +1,24 @@
 @import "tailwindcss";
 
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply m-0 bg-background text-text-dark antialiased;
+  }
+
+  button,
+  input,
+  select {
+    font: inherit;
+  }
+}
+
 @theme {
-  --color-lucena-primary: #D1B59D;
-  --color-lucena-primary-dark: #A88B72;
+  --color-primary: #D1B59D;
+  --color-primary-dark: #A88B72;
 
   --color-background: #FAF8F5;
   --color-surface: #FFFFFF;
