@@ -94,3 +94,34 @@ class BusinessDetailSerializer(serializers.ModelSerializer):
             "operating_hours",
             "created_at",
         ]
+
+
+class BusinessDiscoverySerializer(serializers.ModelSerializer):
+    review_count = serializers.IntegerField(read_only=True)
+
+    locations = BusinessLocationDiscoverySerializer(
+        many=True,
+        read_only=True,
+    )
+
+    features = serializers.SlugRelatedField(
+        many=True,
+        read_only=True,
+        slug_field="name",
+    )
+
+    class Meta:
+        model = Business
+        fields = [
+            "id",
+            "name",
+            "business_type",
+            "price_range",
+            "phone_number",
+            "email",
+            "description",
+            "features",
+            "locations",
+            "created_at",
+            "review_count",
+        ]

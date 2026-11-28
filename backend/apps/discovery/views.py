@@ -7,6 +7,8 @@ from .serializers import (
     BusinessDetailSerializer,
 )
 
+from django.db.models import Count
+
 
 class BusinessDiscoveryView(generics.ListAPIView):
     serializer_class = BusinessDiscoverySerializer
@@ -15,17 +17,18 @@ class BusinessDiscoveryView(generics.ListAPIView):
     def get_queryset(self):
         queryset = (
             Business.objects.filter(status=Business.Status.APPROVED)
+            .annotate(review_count=Count("reviews", distinct=True))
             .prefetch_related(
                 "features",
                 "locations",
             )
-            .order_by("name")
         )
 
         search = self.request.query_params.get("search")
         business_type = self.request.query_params.get("business_type")
         price_range = self.request.query_params.get("price_range")
         barangay = self.request.query_params.get("barangay")
+        hidden_gems = self.request.query_params.get("hidden_gems")
 
         if search:
             queryset = queryset.filter(name__icontains=search)
@@ -37,7 +40,18 @@ class BusinessDiscoveryView(generics.ListAPIView):
             queryset = queryset.filter(price_range=price_range)
 
         if barangay:
-            queryset = queryset.filter(locations__barangay__icontains=barangay)
+            queryset = queryset.filter(
+                locations__barangay__icontains=barangay
+            )
+
+        if hidden_gems == "true":
+            queryset = (
+                queryset
+                .filter(review_count__lte=5)
+                .order_by("review_count", "-created_at")
+            )
+        else:
+            queryset = queryset.order_by("name")
 
         return queryset.distinct()
 
