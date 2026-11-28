@@ -17,7 +17,7 @@ function Navbar({ onSearch }) {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-surface shadow-xl shadow-border">
+    <header className="sticky top-0 z-50 border-b border-border bg-surface shadow-lg shadow-border">
       <div className="mx-auto max-w-7xl px-5 py-3.5 sm:px-8 lg:px-10">
         <div className="flex h-14 items-center justify-between">
           <Link
@@ -78,7 +78,7 @@ function Navbar({ onSearch }) {
 
           <form
             onSubmit={handleSearch}
-            className="hidden w-full max-w-[430px] shrink-0 items-center gap-2 rounded-lg border border-border bg-surface px-3 py-2 sm:flex"
+            className="hidden w-full max-w-[430px] shrink-0 items-center gap-2 rounded-lg border border-border bg-surface p-3 sm:flex"
           >
             <Search size={17} className="shrink-0 text-text-secondary" />
 
