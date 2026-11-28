@@ -21,7 +21,7 @@ function BusinessCard({ business }) {
 
   return (
     <article className="group overflow-hidden rounded-3xl border border-border bg-surface shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg">
-      <div className="relative flex h-52 items-center justify-center bg-gradient-to-br from-lucena-primary/40 to-[#E5DDD5]">
+      <div className="relative flex h-52 items-center justify-center bg-gradient-to-br from-lucena-primary/40 to-border">
         <BusinessIcon
           size={55}
           strokeWidth={1.2}
